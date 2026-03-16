@@ -10,26 +10,53 @@
       <p class="error">{{ error() }}</p>
     } @else {
       <div class="grid">
-        @for (item of items(); track item.id) {
-          <article class="card">
-            @if (item.videoUrl) {
-              <video class="media" [src]="item.videoUrl" muted loop playsinline></video>
+        @for (group of groups(); track group.groupSlug) {
+          <article class="card" (click)="openModal(group)">
+            @if (group.coverVideoUrl) {
+              <div class="video-wrap">
+                <video class="card-cover" [src]="group.coverVideoUrl" [muted]="true" loop playsinline (play)="muteVideo($event)"></video>
+                <span class="video-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48" height="48"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></span>
+              </div>
             } @else {
-              <img class="media" [src]="item.imageUrl" [alt]="item.title" loading="lazy" />
+              <img class="card-cover" [src]="group.coverImageUrl" [alt]="group.groupTitle" loading="lazy" />
             }
             <div class="card-body">
-              <h2>{{ item.title }}</h2>
-              <span class="category">{{ item.category }}</span>
-              @if (item.description) {
-                <p>{{ item.description }}</p>
-              }
+              <h2>{{ group.groupTitle }}</h2>
+              <p class="card-meta">{{ group.itemCount }} {{ group.itemCount === 1 ? 'foto o vídeo' : 'fotos y vídeos' }}</p>
             </div>
           </article>
         }
       </div>
-      @if (items().length === 0) {
+      @if (groups().length === 0) {
         <p class="muted">Próximamente añadiremos trabajos a la galería.</p>
       }
     }
   </div>
 </section>
+
+@if (openGroup(); as group) {
+  <div class="modal-backdrop" (click)="onBackdropClick($event)" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box">
+      <header class="modal-header">
+        <h2 id="modal-title">{{ group.groupTitle }}</h2>
+        <button type="button" class="modal-close" (click)="closeModal()" aria-label="Cerrar">×</button>
+      </header>
+      <div class="modal-body">
+        <div class="modal-grid">
+          @for (item of group.items; track item.id) {
+            <div class="modal-item">
+              @if (item.videoUrl) {
+                <div class="video-wrap">
+                  <video [src]="item.videoUrl" [muted]="true" playsinline (play)="onVideoPlay($event)" (pause)="onVideoPause($event)" (click)="toggleVideoPlay($event)"></video>
+                  <span class="video-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="56" height="56"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></span>
+                </div>
+              } @else {
+                <img [src]="item.imageUrl" [alt]="item.title" loading="lazy" />
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -19,7 +19,7 @@ interface ServiceItem {
     .page-hero {
       padding: var(--space-2xl) var(--space-xl);
       text-align: center;
-      background: var(--color-bg-alt);
+      background: linear-gradient(165deg, #f8f6f4 0%, var(--color-bg-alt) 100%);
     }
     .page-hero h1 { margin-bottom: var(--space-sm); }
     .lead { color: var(--color-text-muted); margin: 0; }
@@ -33,8 +33,15 @@ interface ServiceItem {
       background: var(--color-surface);
       border-radius: var(--radius-lg);
       border: 1px solid var(--color-border);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
     }
-    .card .icon { font-size: 1.5rem; display: block; margin-bottom: var(--space-md); color: var(--color-accent); }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--color-highlight);
+    }
+    .card .icon { font-size: 1.75rem; display: block; margin-bottom: var(--space-md); color: var(--color-accent-warm); transition: transform var(--transition); }
+    .card:hover .icon { transform: scale(1.1); }
     .card h2 { margin-bottom: var(--space-md); font-size: 1.25rem; }
     .card p { margin: 0; font-size: 0.9375rem; color: var(--color-text-muted); }
   `],

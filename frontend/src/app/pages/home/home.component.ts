@@ -49,34 +49,53 @@ import { RouterLink } from '@angular/router';
   styles: [`
     .hero {
       padding: var(--space-3xl) var(--space-xl);
-      background: linear-gradient(180deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
+      background: linear-gradient(165deg, #f8f6f4 0%, var(--color-bg-alt) 40%, var(--color-bg) 100%);
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    .hero-content { max-width: 42rem; margin: 0 auto; }
-    .hero h1 { margin-bottom: var(--space-lg); color: var(--color-text); }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 60%;
+      height: 140%;
+      background: radial-gradient(ellipse, rgba(180,83,74,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { max-width: 42rem; margin: 0 auto; position: relative; z-index: 1; }
+    .hero h1 {
+      margin-bottom: var(--space-lg);
+      color: var(--color-text);
+      animation: fadeInUp 0.7s var(--ease-out) both;
+    }
     .lead {
       font-size: 1.125rem;
       color: var(--color-text-muted);
       margin-bottom: var(--space-2xl);
+      animation: fadeInUp 0.7s var(--ease-out) 0.15s both;
     }
-    .cta { display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap; }
+    .cta { display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap; animation: fadeInUp 0.7s var(--ease-out) 0.3s both; }
     .btn {
       display: inline-block;
       padding: var(--space-md) var(--space-xl);
       border-radius: var(--radius);
       font-weight: 500;
-      transition: background 0.2s, color 0.2s;
+      transition: transform var(--transition), background var(--transition), color var(--transition), border-color var(--transition), box-shadow var(--transition);
     }
+    .btn:hover { transform: translateY(-2px); }
     .btn-primary {
       background: var(--color-text);
       color: var(--color-bg);
-      &:hover { background: var(--color-accent); color: var(--color-bg); }
+      box-shadow: var(--shadow);
+      &:hover { background: var(--color-accent-warm); color: #fff; box-shadow: var(--shadow-hover); }
     }
     .btn-secondary {
       background: transparent;
       color: var(--color-text);
-      border: 1px solid var(--color-border);
-      &:hover { border-color: var(--color-accent); color: var(--color-accent); }
+      border: 2px solid var(--color-border);
+      &:hover { border-color: var(--color-accent-warm); color: var(--color-accent-warm); }
     }
     .intro { padding: var(--space-3xl) var(--space-xl); }
     .container { max-width: 64rem; margin: 0 auto; }
@@ -98,14 +117,28 @@ import { RouterLink } from '@angular/router';
       border-radius: var(--radius-lg);
       border: 1px solid var(--color-border);
       text-align: center;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
     }
-    .card-icon { font-size: 1.5rem; color: var(--color-accent-soft); display: block; margin-bottom: var(--space-sm); }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--color-highlight);
+    }
+    .card-icon { font-size: 1.75rem; color: var(--color-accent-warm); display: block; margin-bottom: var(--space-sm); transition: transform var(--transition); }
+    .card:hover .card-icon { transform: scale(1.1); }
     .card h3 { margin-bottom: var(--space-sm); font-size: 1.125rem; }
     .card p { font-size: 0.9375rem; color: var(--color-text-muted); margin: 0; }
     .preview { padding: var(--space-2xl) var(--space-xl); background: var(--color-bg-alt); }
     .preview h2 { margin-bottom: var(--space-sm); }
     .preview .muted { color: var(--color-text-muted); margin-bottom: var(--space-md); }
-    .link-arrow { font-weight: 500; }
+    .link-arrow {
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35em;
+      transition: gap var(--transition), color var(--transition);
+      &:hover { gap: 0.6em; color: var(--color-accent-warm); }
+    }
   `],
 })
 export class HomeComponent {}

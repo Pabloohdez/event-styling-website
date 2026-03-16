@@ -16,6 +16,8 @@ model GalleryItem {
   imageUrl    String   @map("image_url")
   videoUrl    String?  @map("video_url")
   order       Int      @default(0)
+  groupSlug   String?  @map("group_slug")   // agrupa items para mostrar en un mismo recuadro/modal
+  groupTitle  String?  @map("group_title") // título del grupo en la tarjeta y modal
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 

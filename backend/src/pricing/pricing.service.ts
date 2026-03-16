@@ -5,15 +5,21 @@ import { PrismaService } from '../prisma/prisma.service';
 export class PricingService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return this.prisma.pricingPackage.findMany({
+  async findAll() {
+    const packages = await this.prisma.pricingPackage.findMany({
       orderBy: { order: 'asc' },
     });
+    return packages.map((p) => ({
+      ...p,
+      price: Math.round(Number(p.price)),
+    }));
   }
 
-  findBySlug(slug: string) {
-    return this.prisma.pricingPackage.findUnique({
+  async findBySlug(slug: string) {
+    const p = await this.prisma.pricingPackage.findUnique({
       where: { slug },
     });
+    if (!p) return null;
+    return { ...p, price: Math.round(Number(p.price)) };
   }
 }

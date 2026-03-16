@@ -16,7 +16,7 @@
             @if (pkg.description) {
               <p class="desc">{{ pkg.description }}</p>
             }
-            <div class="price">{{ pkg.price }} €</div>
+            <div class="price">{{ formatPrice(pkg.price) }} €</div>
             <ul class="features">
               @for (f of pkg.features; track f) {
                 <li>{{ f }}</li>

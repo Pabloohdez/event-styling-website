@@ -10,6 +10,11 @@ export class GalleryController {
     return this.galleryService.findAll();
   }
 
+  @Get('groups')
+  findGroups() {
+    return this.galleryService.findGroups();
+  }
+
   @Get('category/:category')
   findByCategory(@Param('category') category: string) {
     return this.galleryService.findByCategory(category);

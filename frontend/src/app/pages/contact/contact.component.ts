@@ -99,7 +99,8 @@ const API_URL = '/api';
       font-weight: 500;
       font-size: 1rem;
       cursor: pointer;
-      &:hover:not(:disabled) { background: var(--color-accent); }
+      transition: background var(--transition), transform var(--transition);
+      &:hover:not(:disabled) { background: var(--color-accent-warm); transform: translateY(-2px); }
       &:disabled { opacity: 0.6; cursor: not-allowed; }
     }
     .success {

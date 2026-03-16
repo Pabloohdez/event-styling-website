@@ -1,4 +1,4 @@
-/* Event Styling Tenerife - Paleta fina y clara */
+/* Event Styling Tenerife - Paleta fina, clara y con vida */
 :root {
   --color-bg: #fafaf9;
   --color-bg-alt: #f5f4f2;
@@ -6,6 +6,7 @@
   --color-text: #1c1917;
   --color-text-muted: #57534e;
   --color-accent: #78716c;
+  --color-accent-warm: #b4534a;
   --color-accent-soft: #a8a29e;
   --color-border: #e7e5e4;
   --color-highlight: #d6d3d1;
@@ -21,7 +22,20 @@
   --radius: 0.5rem;
   --radius-lg: 0.75rem;
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.1);
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition: 0.25s var(--ease-out);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 *,
@@ -58,7 +72,7 @@ h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); }
 a {
   color: var(--color-text);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--transition);
   &:hover { color: var(--color-accent); }
 }
 

@@ -41,6 +41,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
       font-family: var(--font-display);
       font-size: 1.5rem;
       font-weight: 600;
+      transition: color var(--transition);
+      &:hover { color: var(--color-accent-warm); }
     }
     .nav {
       display: flex;
@@ -49,18 +51,32 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
         font-size: 0.9375rem;
         font-weight: 500;
         color: var(--color-text-muted);
-        &.active { color: var(--color-text); }
+        position: relative;
+        padding: var(--space-xs) 0;
+        transition: color var(--transition);
+        &::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 0;
+          height: 2px;
+          background: var(--color-accent-warm);
+          transition: width var(--transition);
+        }
+        &:hover, &.active { color: var(--color-text); }
+        &:hover::after, &.active::after { width: 100%; }
       }
     }
     .main { flex: 1; }
     .footer {
       padding: var(--space-2xl) var(--space-xl);
       text-align: center;
-      background: var(--color-bg-alt);
-      border-top: 1px solid var(--color-border);
+      background: #292524;
+      border-top: 1px solid rgba(255,255,255,0.08);
       font-size: 0.875rem;
-      color: var(--color-text-muted);
-      .muted { margin-top: var(--space-xs); font-size: 0.8125rem; opacity: 0.9; }
+      color: rgba(255,255,255,0.85);
+      .muted { margin-top: var(--space-xs); font-size: 0.8125rem; color: rgba(255,255,255,0.6); }
     }
     @media (max-width: 768px) {
       .header { flex-direction: column; gap: var(--space-md); }

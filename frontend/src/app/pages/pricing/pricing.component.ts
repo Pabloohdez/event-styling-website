@@ -23,7 +23,7 @@ interface PricingPackage {
     .page-hero {
       padding: var(--space-2xl) var(--space-xl);
       text-align: center;
-      background: var(--color-bg-alt);
+      background: linear-gradient(165deg, #f8f6f4 0%, var(--color-bg-alt) 100%);
     }
     .page-hero h1 { margin-bottom: var(--space-sm); }
     .lead { color: var(--color-text-muted); margin: 0; }
@@ -39,8 +39,14 @@ interface PricingPackage {
       border: 1px solid var(--color-border);
       display: flex;
       flex-direction: column;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
     }
-    .card.highlighted { border-color: var(--color-accent); box-shadow: var(--shadow-lg); }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+    .card.highlighted { border-color: var(--color-accent-warm); box-shadow: var(--shadow-lg); }
+    .card.highlighted:hover { box-shadow: 0 12px 28px rgba(180,83,74,0.15); }
     .card h2 { margin: 0 0 var(--space-sm); font-size: 1.25rem; }
     .desc { font-size: 0.9375rem; color: var(--color-text-muted); margin: 0 0 var(--space-md); }
     .price { font-family: var(--font-display); font-size: 1.75rem; font-weight: 600; margin-bottom: var(--space-lg); }
@@ -65,7 +71,8 @@ interface PricingPackage {
       color: var(--color-bg);
       border-radius: var(--radius);
       font-weight: 500;
-      &:hover { background: var(--color-accent); }
+      transition: transform var(--transition), background var(--transition);
+      &:hover { background: var(--color-accent-warm); transform: translateY(-2px); }
     }
   `],
 })
@@ -78,7 +85,12 @@ export class PricingComponent {
   constructor() {
     this.http.get<PricingPackage[]>(`${API_URL}/pricing`).subscribe({
       next: (data) => {
-        this.packages.set(data.map((p) => ({ ...p, price: String(p.price) })));
+        this.packages.set(
+          data.map((p) => ({
+            ...p,
+            price: String(Number.isFinite(Number(p.price)) ? Math.round(Number(p.price)) : p.price),
+          }))
+        );
         this.loading.set(false);
       },
       error: () => {
@@ -86,5 +98,11 @@ export class PricingComponent {
         this.loading.set(false);
       },
     });
+  }
+
+  /** Muestra el precio sin decimales. */
+  formatPrice(price: string): string {
+    const n = Number(price);
+    return Number.isFinite(n) ? String(Math.round(n)) : price;
   }
 }
