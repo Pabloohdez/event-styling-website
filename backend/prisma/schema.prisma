@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model GalleryItem {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  description String?
+  category    String   // baby-shower, bodas, comuniones, etc.
+  imageUrl    String   @map("image_url")
+  videoUrl    String?  @map("video_url")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("gallery_items")
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  description String
+  icon        String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("services")
+}
+
+model PricingPackage {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  features    String[] // array de características
+  highlighted Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("pricing_packages")
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  eventType String?  @map("event_type")
+  message   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("contact_messages")
+}

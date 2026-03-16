@@ -1,30 +1,42 @@
-# Tenerife Event Styling - Full-Stack & Dockerized CMS
+# Event Styling Tenerife
 
-## 📖 Descripción del Proyecto
+Web profesional para una diseñadora de eventos en Tenerife: galería, servicios, tarifas competitivas y contacto. Desplazamiento disponible.
 
-Plataforma web Full-Stack desarrollada a medida para una diseñadora de eventos e interiores en Tenerife, Islas Canarias. El negocio está especializado en la creación de entornos inmersivos y decoración 100% personalizada, con un fuerte enfoque en *Baby Showers* y eventos exclusivos.
+## Stack
 
-Este proyecto va más allá de un simple portafolio digital. Cuenta con una vista de cliente (Frontend) optimizada para la conversión, respaldada por un gestor de contenidos a medida (Backend) que permite a la propietaria subir nuevas galerías, gestionar presupuestos y actualizar sus servicios. Toda la arquitectura está contenerizada con Docker para garantizar un despliegue predecible en cualquier entorno.
+- **Frontend:** Angular 19 + TypeScript (diseño claro y fino)
+- **Backend:** NestJS + TypeScript
+- **Base de datos:** PostgreSQL (Supabase o contenedor local)
+- **Contenedores:** Docker + Docker Compose
 
-## ✨ Características Principales
+## Cómo ejecutar
 
-- **Arquitectura Contenerizada:** Aplicación completamente empaquetada con Docker y orquestada con Docker Compose para un entorno de desarrollo y producción idénticos.
-- **Galería Dinámica Autogestionable:** Los clientes exploran los diseños de *baby showers*, alimentados en tiempo real desde la base de datos en Supabase.
-- **Panel de Administración (CMS):** Acceso seguro para que la diseñadora suba imágenes y gestione el contenido sin necesidad de saber código.
-- **Tipado Estricto End-to-End:** Uso de TypeScript tanto en el cliente como en el servidor.
-- **Arquitectura de Base de Datos Moderna:** Integración fluida con PostgreSQL utilizando Prisma ORM para un modelado de datos seguro y eficiente.
+```bash
+# Construir y levantar todo (frontend, backend, PostgreSQL)
+docker-compose up --build
+```
 
-## 🛠️ Stack Tecnológico
+- **Web:** http://localhost:4200  
+- **API:** http://localhost:3000 (el frontend llama a `/api/*`, proxy vía nginx)
 
-**Frontend:**
-- Angular + TypeScript (Vite)
-- Tailwind CSS
+### Usar Supabase en lugar de la base local
 
-**Backend & Base de Datos:**
-- NestJS (TypeScript)
-- PostgreSQL (Supabase)
-- Prisma ORM
+1. Crea un proyecto en [Supabase](https://supabase.com) y copia la connection string (URI) de PostgreSQL.
+2. Crea un archivo `.env` en la raíz del repo (opcional):
 
-**DevOps & Infraestructura:**
-- Docker & Docker Compose
-- CI/CD [Opcional: GitHub Actions / Vercel]
+   ```env
+   DATABASE_URL=postgresql://postgres:[PASSWORD]@db.[PROJECT].supabase.co:5432/postgres
+   ```
+
+3. Levanta solo frontend y backend (sin contenedor `db`): comenta o elimina el servicio `db` y la dependencia `depends_on` del backend en `docker-compose.yml`, y define `DATABASE_URL` con la URL de Supabase.
+4. Ejecuta las migraciones una vez contra Supabase (desde tu máquina, con `npx prisma migrate deploy` y `DATABASE_URL` apuntando a Supabase), o mantén el servicio `db` para desarrollo y en producción usa solo Supabase.
+
+## Estructura
+
+- `frontend/` — Angular (páginas: Inicio, Servicios, Galería, Tarifas, Contacto)
+- `backend/` — NestJS (API REST, Prisma, módulos gallery, services, pricing, contact)
+- `docker-compose.yml` — orquestación de los tres servicios
+
+## Datos iniciales
+
+La base arranca vacía. Para tener galería, servicios y tarifas visibles hay que insertar datos (por ejemplo con Prisma Studio: `cd backend && npx prisma studio`, o con seeds que puedes añadir en `backend/prisma/seed.ts`).

@@ -1,0 +1,34 @@
+<section class="page-hero">
+  <h1>Tarifas</h1>
+  <p class="lead">Precios claros y competitivos para tu evento</p>
+</section>
+<section class="content">
+  <div class="container">
+    @if (loading()) {
+      <p class="loading">Cargando tarifas…</p>
+    } @else if (error()) {
+      <p class="error">{{ error() }}</p>
+    } @else {
+      <div class="grid">
+        @for (pkg of packages(); track pkg.id) {
+          <article class="card" [class.highlighted]="pkg.highlighted">
+            <h2>{{ pkg.name }}</h2>
+            @if (pkg.description) {
+              <p class="desc">{{ pkg.description }}</p>
+            }
+            <div class="price">{{ pkg.price }} €</div>
+            <ul class="features">
+              @for (f of pkg.features; track f) {
+                <li>{{ f }}</li>
+              }
+            </ul>
+            <a routerLink="/contacto" class="btn">Solicitar presupuesto</a>
+          </article>
+        }
+      </div>
+      @if (packages().length === 0) {
+        <p class="muted">Próximamente publicaremos nuestras tarifas. Contacta para un presupuesto personalizado.</p>
+      }
+    }
+  </div>
+</section>

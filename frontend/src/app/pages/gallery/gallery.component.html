@@ -1,0 +1,35 @@
+<section class="page-hero">
+  <h1>Galería</h1>
+  <p class="lead">Algunos de nuestros trabajos</p>
+</section>
+<section class="content">
+  <div class="container">
+    @if (loading()) {
+      <p class="loading">Cargando galería…</p>
+    } @else if (error()) {
+      <p class="error">{{ error() }}</p>
+    } @else {
+      <div class="grid">
+        @for (item of items(); track item.id) {
+          <article class="card">
+            @if (item.videoUrl) {
+              <video class="media" [src]="item.videoUrl" muted loop playsinline></video>
+            } @else {
+              <img class="media" [src]="item.imageUrl" [alt]="item.title" loading="lazy" />
+            }
+            <div class="card-body">
+              <h2>{{ item.title }}</h2>
+              <span class="category">{{ item.category }}</span>
+              @if (item.description) {
+                <p>{{ item.description }}</p>
+              }
+            </div>
+          </article>
+        }
+      </div>
+      @if (items().length === 0) {
+        <p class="muted">Próximamente añadiremos trabajos a la galería.</p>
+      }
+    }
+  </div>
+</section>
