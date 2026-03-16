@@ -17,7 +17,7 @@ Este proyecto va más allá de un simple portafolio digital. Cuenta con una vist
 ## 🛠️ Stack Tecnológico
 
 **Frontend:**
-- React.js + TypeScript (Vite)
+- Angular + TypeScript (Vite)
 - Tailwind CSS
 
 **Backend & Base de Datos:**
