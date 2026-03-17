@@ -34,15 +34,17 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
       justify-content: space-between;
       padding: var(--space-md) var(--space-xl);
       background: var(--color-surface);
-      border-bottom: 1px solid var(--color-border);
+      border-bottom: 2px solid var(--color-border);
       box-shadow: var(--shadow);
+      transition: box-shadow var(--transition), border-color var(--transition);
     }
+    .header:hover { box-shadow: var(--shadow-lg); border-color: var(--color-highlight); }
     .logo {
       font-family: var(--font-display);
       font-size: 1.5rem;
       font-weight: 600;
-      transition: color var(--transition);
-      &:hover { color: var(--color-accent-warm); }
+      transition: color var(--transition), transform var(--transition);
+      &:hover { color: var(--color-accent); transform: scale(1.03); }
     }
     .nav {
       display: flex;
@@ -53,16 +55,17 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
         color: var(--color-text-muted);
         position: relative;
         padding: var(--space-xs) 0;
-        transition: color var(--transition);
+        transition: color 0.35s var(--ease-out);
         &::after {
           content: '';
           position: absolute;
           left: 0;
           bottom: 0;
           width: 0;
-          height: 2px;
-          background: var(--color-accent-warm);
-          transition: width var(--transition);
+          height: 3px;
+          background: linear-gradient(90deg, var(--color-accent), var(--color-accent-soft));
+          transition: width 0.35s var(--ease-out);
+          border-radius: 2px;
         }
         &:hover, &.active { color: var(--color-text); }
         &:hover::after, &.active::after { width: 100%; }
@@ -72,11 +75,12 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     .footer {
       padding: var(--space-2xl) var(--space-xl);
       text-align: center;
-      background: #292524;
-      border-top: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, #5E3F44 0%, #3E3333 100%);
+      border-top: 3px solid var(--color-accent);
       font-size: 0.875rem;
-      color: rgba(255,255,255,0.85);
-      .muted { margin-top: var(--space-xs); font-size: 0.8125rem; color: rgba(255,255,255,0.6); }
+      color: rgba(255,255,255,0.9);
+      transition: border-color var(--transition);
+      .muted { margin-top: var(--space-xs); font-size: 0.8125rem; color: rgba(255,255,255,0.65); }
     }
     @media (max-width: 768px) {
       .header { flex-direction: column; gap: var(--space-md); }

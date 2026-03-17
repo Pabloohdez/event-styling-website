@@ -23,7 +23,7 @@ interface PricingPackage {
     .page-hero {
       padding: var(--space-2xl) var(--space-xl);
       text-align: center;
-      background: linear-gradient(165deg, #f8f6f4 0%, var(--color-bg-alt) 100%);
+      background: linear-gradient(145deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
     }
     .page-hero h1 { margin-bottom: var(--space-sm); }
     .lead { color: var(--color-text-muted); margin: 0; }
@@ -36,17 +36,20 @@ interface PricingPackage {
       padding: var(--space-xl);
       background: var(--color-surface);
       border-radius: var(--radius-lg);
-      border: 1px solid var(--color-border);
+      border: 2px solid var(--color-border);
       display: flex;
       flex-direction: column;
-      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+    .card {
+      border-width: 2px;
+      transition: transform 0.4s var(--ease-bounce), box-shadow var(--transition-slow), border-color var(--transition);
     }
     .card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-8px) scale(1.02);
       box-shadow: var(--shadow-hover);
     }
-    .card.highlighted { border-color: var(--color-accent-warm); box-shadow: var(--shadow-lg); }
-    .card.highlighted:hover { box-shadow: 0 12px 28px rgba(180,83,74,0.15); }
+    .card.highlighted { border-color: var(--color-accent); box-shadow: var(--shadow-lg); }
+    .card.highlighted:hover { box-shadow: var(--shadow-hover); border-color: var(--color-accent-soft); }
     .card h2 { margin: 0 0 var(--space-sm); font-size: 1.25rem; }
     .desc { font-size: 0.9375rem; color: var(--color-text-muted); margin: 0 0 var(--space-md); }
     .price { font-family: var(--font-display); font-size: 1.75rem; font-weight: 600; margin-bottom: var(--space-lg); }
@@ -67,12 +70,12 @@ interface PricingPackage {
       display: block;
       text-align: center;
       padding: var(--space-md);
-      background: var(--color-text);
-      color: var(--color-bg);
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+      color: #fff;
       border-radius: var(--radius);
       font-weight: 500;
-      transition: transform var(--transition), background var(--transition);
-      &:hover { background: var(--color-accent-warm); transform: translateY(-2px); }
+      transition: transform 0.35s var(--ease-bounce), background var(--transition), box-shadow var(--transition);
+      &:hover { background: linear-gradient(135deg, var(--color-accent-hover) 0%, var(--color-accent) 100%); transform: translateY(-4px); box-shadow: var(--shadow-hover); }
     }
   `],
 })

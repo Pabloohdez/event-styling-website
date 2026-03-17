@@ -9,7 +9,7 @@ export class PricingService {
     const packages = await this.prisma.pricingPackage.findMany({
       orderBy: { order: 'asc' },
     });
-    return packages.map((p) => ({
+    return packages.map((p: (typeof packages)[number]) => ({
       ...p,
       price: Math.round(Number(p.price)),
     }));

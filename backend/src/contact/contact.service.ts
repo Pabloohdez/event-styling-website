@@ -1,13 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { MailService } from '../mail/mail.service';
+import { SmsService } from '../mail/sms.service';
 import { CreateContactDto } from './create-contact.dto';
 
 @Injectable()
 export class ContactService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly mail: MailService,
+    private readonly sms: SmsService,
+  ) {}
 
-  create(dto: CreateContactDto) {
-    return this.prisma.contactMessage.create({
+  async create(dto: CreateContactDto) {
+    const result = await this.prisma.contactMessage.create({
       data: {
         name: dto.name,
         email: dto.email,
@@ -16,5 +22,8 @@ export class ContactService {
         message: dto.message,
       },
     });
+    await this.mail.sendContactNotification(dto);
+    await this.sms.sendContactNotification(dto);
+    return result;
   }
 }

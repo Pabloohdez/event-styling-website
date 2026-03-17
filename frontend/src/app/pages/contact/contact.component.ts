@@ -64,7 +64,7 @@ const API_URL = '/api';
     .page-hero {
       padding: var(--space-2xl) var(--space-xl);
       text-align: center;
-      background: var(--color-bg-alt);
+      background: linear-gradient(145deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
     }
     .page-hero h1 { margin-bottom: var(--space-sm); }
     .lead { color: var(--color-text-muted); margin: 0; }
@@ -92,15 +92,15 @@ const API_URL = '/api';
     .btn {
       width: 100%;
       padding: var(--space-md);
-      background: var(--color-text);
-      color: var(--color-bg);
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+      color: #fff;
       border: none;
       border-radius: var(--radius);
       font-weight: 500;
       font-size: 1rem;
       cursor: pointer;
-      transition: background var(--transition), transform var(--transition);
-      &:hover:not(:disabled) { background: var(--color-accent-warm); transform: translateY(-2px); }
+      transition: background var(--transition), transform 0.35s var(--ease-bounce), box-shadow var(--transition);
+      &:hover:not(:disabled) { background: linear-gradient(135deg, var(--color-accent-hover) 0%, var(--color-accent) 100%); transform: translateY(-4px); box-shadow: var(--shadow-hover); }
       &:disabled { opacity: 0.6; cursor: not-allowed; }
     }
     .success {

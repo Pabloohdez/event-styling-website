@@ -37,6 +37,10 @@ docker-compose up --build
 - `backend/` — NestJS (API REST, Prisma, módulos gallery, services, pricing, contact)
 - `docker-compose.yml` — orquestación de los tres servicios
 
+## Desplegar en Google (Firebase + Cloud Run)
+
+Para dejar la web en producción (Firebase Hosting + Cloud Run, base de datos en Supabase), sigue la guía **[DEPLOY.md](DEPLOY.md)**. Antes de desplegar, revisa **[SECURITY.md](SECURITY.md)** (CORS, rate limiting, secretos).
+
 ## Datos iniciales
 
 La base arranca vacía. Para tener galería, servicios y tarifas visibles hay que insertar datos (por ejemplo con Prisma Studio: `cd backend && npx prisma studio`, o con seeds que puedes añadir en `backend/prisma/seed.ts`).

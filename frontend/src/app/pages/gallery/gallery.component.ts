@@ -30,7 +30,7 @@ interface GalleryGroup {
     .page-hero {
       padding: var(--space-2xl) var(--space-xl);
       text-align: center;
-      background: linear-gradient(165deg, #f8f6f4 0%, var(--color-bg-alt) 100%);
+      background: linear-gradient(145deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
     }
     .page-hero h1 { margin-bottom: var(--space-sm); }
     .lead { color: var(--color-text-muted); margin: 0; }
@@ -43,14 +43,14 @@ interface GalleryGroup {
       background: var(--color-surface);
       border-radius: var(--radius-lg);
       overflow: hidden;
-      border: 1px solid var(--color-border);
+      border: 2px solid var(--color-border);
       cursor: pointer;
-      transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+      transition: box-shadow var(--transition-slow), transform 0.4s var(--ease-bounce), border-color var(--transition);
     }
     .card:hover {
       box-shadow: var(--shadow-hover);
-      transform: translateY(-6px);
-      border-color: var(--color-highlight);
+      transform: translateY(-10px) scale(1.03);
+      border-color: var(--color-accent-soft);
     }
     .video-wrap { position: relative; display: block; }
     .video-wrap .card-cover { width: 100%; height: 220px; object-fit: cover; display: block; }
@@ -72,7 +72,7 @@ interface GalleryGroup {
     }
     .card-body { padding: var(--space-lg); }
     .card-body h2 { margin: 0 0 var(--space-xs); font-size: 1.125rem; }
-    .card-meta { font-size: 0.8125rem; color: var(--color-accent); }
+    .card-meta { font-size: 0.8125rem; color: var(--color-accent); transition: color var(--transition); }
     /* Modal */
     .modal-backdrop {
       position: fixed;
@@ -94,7 +94,8 @@ interface GalleryGroup {
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.2), 0 0 0 1px var(--color-border);
+      animation: subtleScale 0.35s var(--ease-bounce);
     }
     .modal-header {
       padding: var(--space-lg) var(--space-xl);
@@ -114,7 +115,8 @@ interface GalleryGroup {
       color: var(--color-text-muted);
       padding: 0.25rem;
     }
-    .modal-close:hover { color: var(--color-text); }
+    .modal-close { transition: color var(--transition), transform var(--transition); }
+    .modal-close:hover { color: var(--color-accent); transform: scale(1.15); }
     .modal-body {
       overflow-y: auto;
       padding: var(--space-xl);

@@ -1,15 +1,25 @@
-/* Event Styling Tenerife - Paleta fina, clara y con vida */
+/* Event Styling Tenerife - Paleta Sugar & Stories */
 :root {
-  --color-bg: #fafaf9;
-  --color-bg-alt: #f5f4f2;
-  --color-surface: #ffffff;
-  --color-text: #1c1917;
-  --color-text-muted: #57534e;
-  --color-accent: #78716c;
-  --color-accent-warm: #b4534a;
-  --color-accent-soft: #a8a29e;
-  --color-border: #e7e5e4;
-  --color-highlight: #d6d3d1;
+  /* PETAL · Fondo principal */
+  --color-bg: #F7EAEB;
+  /* PEONY · Fondo alterno / secciones */
+  --color-bg-alt: #E6CECE;
+  /* ALMOND · Superficies (tarjetas, header) */
+  --color-surface: #F0E7E2;
+  /* COCOA · Texto principal */
+  --color-text: #3E3333;
+  /* MERLOT · Texto secundario */
+  --color-text-muted: #5E3F44;
+  /* MAUVE · Acento principal (botones, enlaces, iconos) */
+  --color-accent: #A47E82;
+  --color-accent-dark: #8a6a6e;
+  --color-accent-hover: #b08a8e;
+  --color-accent-warm: #A47E82;
+  --color-accent-gold: #906d71;
+  --color-accent-soft: #c9a4a8;
+  --color-accent-subtle: rgba(164, 126, 130, 0.12);
+  --color-border: #E6CECE;
+  --color-highlight: #F7EAEB;
   --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Outfit', system-ui, sans-serif;
   --space-xs: 0.25rem;
@@ -21,21 +31,49 @@
   --space-3xl: 4rem;
   --radius: 0.5rem;
   --radius-lg: 0.75rem;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.1);
+  --shadow: 0 2px 8px rgba(164, 126, 130, 0.08);
+  --shadow-lg: 0 8px 24px rgba(164, 126, 130, 0.12);
+  --shadow-hover: 0 16px 40px rgba(164, 126, 130, 0.18);
   --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --transition: 0.25s var(--ease-out);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition: 0.35s var(--ease-out);
+  --transition-slow: 0.5s var(--ease-out);
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes subtleScale {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Scroll reveal: elementos que entran al viewport */
+[appScrollReveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+[appScrollReveal].in-view {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 *,
@@ -57,6 +95,27 @@ body {
   color: var(--color-text);
   background-color: var(--color-bg);
   -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Grain sutil (estilo editorial / luxury) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
+  mix-blend-mode: multiply;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* Asegura que el contenido quede sobre el grain */
+body > * {
+  position: relative;
+  z-index: 1;
 }
 
 h1, h2, h3, h4 {
@@ -72,7 +131,7 @@ h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); }
 a {
   color: var(--color-text);
   text-decoration: none;
-  transition: color var(--transition);
+  transition: color var(--transition), transform var(--transition);
   &:hover { color: var(--color-accent); }
 }
 

@@ -19,7 +19,7 @@ interface ServiceItem {
     .page-hero {
       padding: var(--space-2xl) var(--space-xl);
       text-align: center;
-      background: linear-gradient(165deg, #f8f6f4 0%, var(--color-bg-alt) 100%);
+      background: linear-gradient(165deg, var(--color-bg) 0%, var(--color-bg-alt) 100%);
     }
     .page-hero h1 { margin-bottom: var(--space-sm); }
     .lead { color: var(--color-text-muted); margin: 0; }
@@ -32,16 +32,16 @@ interface ServiceItem {
       padding: var(--space-xl);
       background: var(--color-surface);
       border-radius: var(--radius-lg);
-      border: 1px solid var(--color-border);
-      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      border: 2px solid var(--color-border);
+      transition: transform 0.4s var(--ease-bounce), box-shadow var(--transition-slow), border-color var(--transition);
     }
     .card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-10px) scale(1.02);
       box-shadow: var(--shadow-hover);
-      border-color: var(--color-highlight);
+      border-color: var(--color-accent-soft);
     }
-    .card .icon { font-size: 1.75rem; display: block; margin-bottom: var(--space-md); color: var(--color-accent-warm); transition: transform var(--transition); }
-    .card:hover .icon { transform: scale(1.1); }
+    .card .icon { font-size: 1.75rem; display: block; margin-bottom: var(--space-md); color: var(--color-accent); transition: transform 0.4s var(--ease-bounce), color var(--transition); }
+    .card:hover .icon { transform: scale(1.2) rotate(-5deg); color: var(--color-accent-gold); }
     .card h2 { margin-bottom: var(--space-md); font-size: 1.25rem; }
     .card p { margin: 0; font-size: 0.9375rem; color: var(--color-text-muted); }
   `],

@@ -1,4 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './create-contact.dto';
 
@@ -7,6 +8,7 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @Post()
+  @Throttle({ short: { limit: 5, ttl: 60000 } })
   create(@Body() dto: CreateContactDto) {
     return this.contactService.create(dto);
   }

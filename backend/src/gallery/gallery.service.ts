@@ -52,7 +52,7 @@ export class GalleryService {
         coverVideoUrl: first.videoUrl,
         category: first.category,
         itemCount: groupItems.length,
-        items: groupItems.map((i) => ({
+        items: groupItems.map((i: (typeof items)[number]) => ({
           id: i.id,
           title: i.title,
           slug: i.slug,
