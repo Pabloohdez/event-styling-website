@@ -1,19 +1,31 @@
 <section class="page-hero">
   <h1>Servicios</h1>
-  <p class="lead">Qué ofrecemos para tu evento</p>
+  <div class="hero-line" aria-hidden="true"></div>
+  <p class="lead">Todo lo que necesitas para que tu evento sea perfecto</p>
 </section>
 <section class="content">
   <div class="container">
     @if (loading()) {
-      <p class="loading">Cargando servicios…</p>
+      <div class="skeleton-grid">
+        @for (i of [1,2,3]; track i) {
+          <div class="skeleton-card">
+            <div class="sk-icon skeleton"></div>
+            <div class="sk-title skeleton"></div>
+            <div class="sk-line skeleton"></div>
+            <div class="sk-line-short skeleton"></div>
+          </div>
+        }
+      </div>
     } @else if (error()) {
       <p class="error">{{ error() }}</p>
     } @else {
       <div class="grid">
         @for (s of services(); track s.id) {
-          <article class="card">
+          <article class="card" appScrollReveal>
             @if (s.icon) {
-              <span class="icon">{{ s.icon }}</span>
+              <div class="icon-wrap">
+                <span class="icon">{{ s.icon }}</span>
+              </div>
             }
             <h2>{{ s.title }}</h2>
             <p>{{ s.description }}</p>
@@ -21,7 +33,7 @@
         }
       </div>
       @if (services().length === 0) {
-        <p class="muted">Próximamente más información sobre nuestros servicios.</p>
+        <p class="empty">Próximamente más información sobre nuestros servicios.</p>
       }
     }
   </div>

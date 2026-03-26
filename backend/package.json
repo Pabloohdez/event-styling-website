@@ -23,8 +23,7 @@
     "helmet": "^8.0.0",
     "nodemailer": "^8.0.2",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1",
-    "twilio": "^5.13.0"
+    "rxjs": "^7.8.1"
   },
   "overrides": {
     "ajv": "^8.18.0"

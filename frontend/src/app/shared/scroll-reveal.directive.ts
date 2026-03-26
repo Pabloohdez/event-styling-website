@@ -1,12 +1,14 @@
-import { Directive, ElementRef, inject, OnInit, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, inject, OnInit, OnDestroy, input } from '@angular/core';
 
 @Directive({
   selector: '[appScrollReveal]',
-  standalone: true,
 })
 export class ScrollRevealDirective implements OnInit, OnDestroy {
   private el = inject(ElementRef<HTMLElement>);
   private observer: IntersectionObserver | null = null;
+
+  threshold = input<number>(0.1);
+  margin = input<string>('0px 0px -50px 0px');
 
   ngOnInit(): void {
     this.observer = new IntersectionObserver(
@@ -17,7 +19,7 @@ export class ScrollRevealDirective implements OnInit, OnDestroy {
           }
         });
       },
-      { rootMargin: '0px 0px -40px 0px', threshold: 0.1 }
+      { rootMargin: this.margin(), threshold: this.threshold() }
     );
     this.observer.observe(this.el.nativeElement);
   }

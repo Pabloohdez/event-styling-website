@@ -1,25 +1,41 @@
 <section class="page-hero">
   <h1>Galería</h1>
-  <p class="lead">Algunos de nuestros trabajos</p>
+  <div class="hero-line" aria-hidden="true"></div>
+  <p class="lead">Inspiración de nuestros eventos más recientes</p>
 </section>
 <section class="content">
   <div class="container">
     @if (loading()) {
-      <p class="loading">Cargando galería…</p>
+      <div class="skeleton-grid">
+        @for (i of [1,2,3,4,5,6]; track i) {
+          <div class="skeleton-card">
+            <div class="sk-img skeleton"></div>
+            <div class="sk-body">
+              <div class="sk-title skeleton"></div>
+              <div class="sk-meta skeleton"></div>
+            </div>
+          </div>
+        }
+      </div>
     } @else if (error()) {
       <p class="error">{{ error() }}</p>
     } @else {
       <div class="grid">
         @for (group of groups(); track group.groupSlug) {
-          <article class="card" (click)="openModal(group)">
-            @if (group.coverVideoUrl) {
-              <div class="video-wrap">
-                <video class="card-cover" [src]="group.coverVideoUrl" [muted]="true" loop playsinline (play)="muteVideo($event)"></video>
-                <span class="video-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48" height="48"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></span>
+          <article class="card" (click)="openModal(group)" appScrollReveal>
+            <div class="card-media">
+              @if (group.coverVideoUrl) {
+                <video [src]="group.coverVideoUrl" [muted]="true" loop playsinline (play)="muteVideo($event)"></video>
+                <span class="video-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="44" height="44"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              } @else {
+                <img [src]="group.coverImageUrl" [alt]="group.groupTitle" loading="lazy" />
+              }
+              <div class="card-overlay">
+                <span>Ver {{ group.itemCount }} {{ group.itemCount === 1 ? 'elemento' : 'elementos' }}</span>
               </div>
-            } @else {
-              <img class="card-cover" [src]="group.coverImageUrl" [alt]="group.groupTitle" loading="lazy" />
-            }
+            </div>
             <div class="card-body">
               <h2>{{ group.groupTitle }}</h2>
               <p class="card-meta">{{ group.itemCount }} {{ group.itemCount === 1 ? 'foto o vídeo' : 'fotos y vídeos' }}</p>
@@ -28,7 +44,7 @@
         }
       </div>
       @if (groups().length === 0) {
-        <p class="muted">Próximamente añadiremos trabajos a la galería.</p>
+        <p class="empty">Próximamente añadiremos trabajos a la galería.</p>
       }
     }
   </div>
@@ -39,7 +55,7 @@
     <div class="modal-box">
       <header class="modal-header">
         <h2 id="modal-title">{{ group.groupTitle }}</h2>
-        <button type="button" class="modal-close" (click)="closeModal()" aria-label="Cerrar">×</button>
+        <button type="button" class="modal-close" (click)="closeModal()" aria-label="Cerrar">&times;</button>
       </header>
       <div class="modal-body">
         <div class="modal-grid">
@@ -48,7 +64,9 @@
               @if (item.videoUrl) {
                 <div class="video-wrap">
                   <video [src]="item.videoUrl" [muted]="true" playsinline (play)="onVideoPlay($event)" (pause)="onVideoPause($event)" (click)="toggleVideoPlay($event)"></video>
-                  <span class="video-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="56" height="56"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></span>
+                  <span class="video-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="48" height="48"><path d="M8 5v14l11-7z"/></svg>
+                  </span>
                 </div>
               } @else {
                 <img [src]="item.imageUrl" [alt]="item.title" loading="lazy" />

@@ -1,5 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ScrollRevealDirective } from '../../shared/scroll-reveal.directive';
+
 const API_URL = '/api';
 
 interface GalleryItemMedia {
@@ -25,35 +27,111 @@ interface GalleryGroup {
 
 @Component({
   selector: 'app-gallery',
+  imports: [ScrollRevealDirective],
   templateUrl: './gallery.component.html',
   styles: [`
     .page-hero {
-      padding: var(--space-2xl) var(--space-xl);
+      padding: var(--space-4xl) var(--space-xl) var(--space-2xl);
       text-align: center;
-      background: linear-gradient(145deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
+      background: var(--color-bg);
+      position: relative;
+      overflow: hidden;
     }
-    .page-hero h1 { margin-bottom: var(--space-sm); }
-    .lead { color: var(--color-text-muted); margin: 0; }
-    .content { padding: var(--space-2xl) var(--space-xl); }
-    .container { max-width: 64rem; margin: 0 auto; }
-    .loading, .error, .muted { text-align: center; color: var(--color-text-muted); }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(184,132,138,0.08), transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(196,150,122,0.06), transparent 50%);
+      pointer-events: none;
+    }
+    .page-hero h1 { margin: 0 0 var(--space-sm); animation: fadeInUp 0.8s var(--ease-out) both; }
+    .hero-line {
+      width: 3.5rem;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-accent), var(--color-accent-gold));
+      border-radius: 2px;
+      margin: var(--space-md) auto;
+      animation: lineGrow 0.6s var(--ease-out) 0.3s both;
+      transform-origin: center;
+    }
+    .lead {
+      color: var(--color-text-muted);
+      margin: 0;
+      font-size: 1.0625rem;
+      animation: fadeInUp 0.8s var(--ease-out) 0.15s both;
+    }
+    .content { padding: var(--space-2xl) var(--space-xl) var(--space-4xl); }
+    .container { max-width: 68rem; margin: 0 auto; }
+
+    /* Skeleton */
+    .skeleton-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-xl);
+    }
+    .skeleton-card {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      .sk-img { width: 100%; aspect-ratio: 4 / 3; }
+      .sk-body { padding: var(--space-lg); }
+      .sk-title { width: 65%; height: 18px; margin-bottom: var(--space-sm); border-radius: var(--radius-sm); }
+      .sk-meta { width: 40%; height: 14px; border-radius: var(--radius-sm); }
+    }
+
+    .loading, .error, .empty { text-align: center; color: var(--color-text-muted); padding: var(--space-xl); }
     .error { color: #b91c1c; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--space-xl); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-xl);
+    }
     .card {
       background: var(--color-surface);
       border-radius: var(--radius-lg);
       overflow: hidden;
-      border: 2px solid var(--color-border);
+      border: 1px solid var(--color-border-light);
       cursor: pointer;
-      transition: box-shadow var(--transition-slow), transform 0.4s var(--ease-bounce), border-color var(--transition);
+      transition: transform 0.4s var(--ease-bounce), box-shadow 0.4s var(--ease-out), border-color 0.3s;
     }
     .card:hover {
+      transform: translateY(-8px);
       box-shadow: var(--shadow-hover);
-      transform: translateY(-10px) scale(1.03);
       border-color: var(--color-accent-soft);
     }
-    .video-wrap { position: relative; display: block; }
-    .video-wrap .card-cover { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .card-media {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+    }
+    .card-media img, .card-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s var(--ease-out);
+    }
+    .card:hover .card-media img,
+    .card:hover .card-media video { transform: scale(1.06); }
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(42,31,31,0.55) 100%);
+      opacity: 0;
+      transition: opacity 0.35s var(--ease-out);
+      display: flex;
+      align-items: flex-end;
+      padding: var(--space-lg);
+    }
+    .card:hover .card-overlay { opacity: 1; }
+    .card-overlay span {
+      color: #fff;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
     .video-icon {
       position: absolute;
       top: 50%;
@@ -62,44 +140,49 @@ interface GalleryGroup {
       color: rgba(255,255,255,0.9);
       filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
       pointer-events: none;
+      z-index: 2;
     }
-    .video-wrap.playing .video-icon { opacity: 0; transition: opacity 0.2s; }
-    .card-cover {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      display: block;
+    .card-body {
+      padding: var(--space-lg);
     }
-    .card-body { padding: var(--space-lg); }
-    .card-body h2 { margin: 0 0 var(--space-xs); font-size: 1.125rem; }
-    .card-meta { font-size: 0.8125rem; color: var(--color-accent); transition: color var(--transition); }
+    .card-body h2 {
+      margin: 0 0 var(--space-xs);
+      font-size: 1.0625rem;
+      font-weight: 500;
+    }
+    .card-meta {
+      font-size: 0.8125rem;
+      color: var(--color-accent);
+    }
+
     /* Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
+      background: var(--color-overlay);
+      backdrop-filter: blur(4px);
       z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: var(--space-lg);
-      box-sizing: border-box;
+      animation: fadeIn 0.25s var(--ease-out);
     }
     .modal-box {
-      background: var(--color-surface);
-      border-radius: var(--radius-lg);
-      max-width: 56rem;
+      background: var(--color-surface-elevated);
+      border-radius: var(--radius-xl);
+      max-width: 60rem;
       width: 100%;
       max-height: 90vh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 24px 48px rgba(0,0,0,0.2), 0 0 0 1px var(--color-border);
-      animation: subtleScale 0.35s var(--ease-bounce);
+      box-shadow: var(--shadow-elevated);
+      animation: scaleIn 0.35s var(--ease-bounce);
     }
     .modal-header {
       padding: var(--space-lg) var(--space-xl);
-      border-bottom: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border-light);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -107,26 +190,36 @@ interface GalleryGroup {
     }
     .modal-header h2 { margin: 0; font-size: 1.25rem; }
     .modal-close {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      line-height: 1;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border-light);
+      border-radius: 50%;
       cursor: pointer;
       color: var(--color-text-muted);
-      padding: 0.25rem;
+      font-size: 1.25rem;
+      line-height: 1;
+      transition: background 0.2s, color 0.2s, transform 0.3s var(--ease-bounce);
+      &:hover { background: var(--color-accent-subtle); color: var(--color-accent-dark); transform: scale(1.1); }
     }
-    .modal-close { transition: color var(--transition), transform var(--transition); }
-    .modal-close:hover { color: var(--color-accent); transform: scale(1.15); }
     .modal-body {
       overflow-y: auto;
       padding: var(--space-xl);
     }
     .modal-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: var(--space-lg);
     }
-    .modal-item .video-wrap { position: relative; border-radius: var(--radius-md); overflow: hidden; }
+    .modal-item { border-radius: var(--radius-lg); overflow: hidden; }
+    .modal-item .video-wrap {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
     .modal-item .video-wrap video {
       width: 100%;
       height: auto;
@@ -136,14 +229,7 @@ interface GalleryGroup {
       background: #000;
       cursor: pointer;
     }
-    .modal-item .video-icon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: rgba(255,255,255,0.95);
-      filter: drop-shadow(0 2px 10px rgba(0,0,0,0.6));
-      pointer-events: none;
+    .modal-item .video-wrap .video-icon {
       transition: opacity 0.2s;
     }
     .modal-item .video-wrap.playing .video-icon { opacity: 0; }
@@ -152,7 +238,7 @@ interface GalleryGroup {
       height: auto;
       max-height: 280px;
       object-fit: cover;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-lg);
       display: block;
     }
   `],
@@ -200,7 +286,6 @@ export class GalleryComponent {
     }
   }
 
-  /** Fuerza mute y volumen 0 en el vídeo. */
   muteVideo(e: Event): void {
     const video = e.target as HTMLVideoElement;
     if (video) {
@@ -209,7 +294,6 @@ export class GalleryComponent {
     }
   }
 
-  /** Play/pause al hacer clic en el vídeo (sin controles nativos). */
   toggleVideoPlay(e: Event): void {
     const video = e.target as HTMLVideoElement;
     if (!video) return;
@@ -218,7 +302,6 @@ export class GalleryComponent {
     video.paused ? video.play() : video.pause();
   }
 
-  /** Oculta el icono de pausa cuando el vídeo se reproduce y fuerza mute. */
   onVideoPlay(e: Event): void {
     const video = e.target as HTMLVideoElement;
     if (video) {
@@ -228,13 +311,11 @@ export class GalleryComponent {
     }
   }
 
-  /** Muestra el icono de pausa cuando el vídeo se pausa. */
   onVideoPause(e: Event): void {
     const video = e.target as HTMLVideoElement;
     video?.parentElement?.classList.remove('playing');
   }
 
-  /** Mutea todos los vídeos (modal + tarjetas) y fuerza volumen 0. */
   private forceMuteAllVideos(): void {
     const videos = document.querySelectorAll<HTMLVideoElement>('video');
     videos.forEach((v) => {

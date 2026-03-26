@@ -43,10 +43,10 @@ export class MailService {
     ].join('\n');
     try {
       await this.transporter.sendMail({
-        from: SMTP_USER,
+        from: `Somos Melina <${SMTP_USER}>`,
         to: CONTACT_NOTIFY_EMAIL,
         replyTo: dto.email,
-        subject: `Event Styling - Nuevo contacto: ${dto.name}`,
+        subject: `Somos Melina - Nuevo contacto: ${dto.name}`,
         text: body,
       });
     } catch (err) {

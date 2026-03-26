@@ -1,25 +1,48 @@
 <section class="page-hero">
   <h1>Tarifas</h1>
-  <p class="lead">Precios claros y competitivos para tu evento</p>
+  <div class="hero-line" aria-hidden="true"></div>
+  <p class="lead">Precios transparentes para que puedas planificar sin sorpresas</p>
 </section>
 <section class="content">
   <div class="container">
     @if (loading()) {
-      <p class="loading">Cargando tarifas…</p>
+      <div class="skeleton-grid">
+        @for (i of [1,2,3]; track i) {
+          <div class="skeleton-card">
+            <div class="sk-title skeleton"></div>
+            <div class="sk-price skeleton"></div>
+            <div class="sk-feat skeleton"></div>
+            <div class="sk-feat skeleton"></div>
+            <div class="sk-feat skeleton"></div>
+            <div class="sk-btn skeleton"></div>
+          </div>
+        }
+      </div>
     } @else if (error()) {
       <p class="error">{{ error() }}</p>
     } @else {
       <div class="grid">
         @for (pkg of packages(); track pkg.id) {
-          <article class="card" [class.highlighted]="pkg.highlighted">
+          <article class="card" [class.highlighted]="pkg.highlighted" appScrollReveal>
+            @if (pkg.highlighted) {
+              <span class="badge-popular">Recomendado</span>
+            }
             <h2>{{ pkg.name }}</h2>
             @if (pkg.description) {
               <p class="desc">{{ pkg.description }}</p>
             }
-            <div class="price">{{ formatPrice(pkg.price) }} €</div>
+            <div class="price-wrap">
+              <span class="price">{{ formatPrice(pkg.price) }}</span>
+              <span class="price-currency">&euro;</span>
+            </div>
             <ul class="features">
               @for (f of pkg.features; track f) {
-                <li>{{ f }}</li>
+                <li>
+                  <svg class="check-icon" viewBox="0 0 20 20" fill="none">
+                    <path d="M4 10.5l4 4 8-8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  {{ f }}
+                </li>
               }
             </ul>
             <a routerLink="/contacto" class="btn">Solicitar presupuesto</a>
@@ -27,7 +50,7 @@
         }
       </div>
       @if (packages().length === 0) {
-        <p class="muted">Próximamente publicaremos nuestras tarifas. Contacta para un presupuesto personalizado.</p>
+        <p class="empty">Próximamente publicaremos nuestras tarifas. Contacta para un presupuesto personalizado.</p>
       }
     }
   </div>
